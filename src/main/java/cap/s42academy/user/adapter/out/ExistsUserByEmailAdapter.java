@@ -10,7 +10,7 @@ class ExistsUserByEmailAdapter implements ExistsUserByEmailPort {
 
     private final UserRepository userRepository;
     @Override
-    public boolean existsUserByEmail(String email) {
+    public boolean existsBy(String email) {
         return userRepository.existsByEmail(email);
     }
 }

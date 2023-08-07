@@ -1,0 +1,20 @@
+services:
+  mysql:
+    container_name: mysql-atm
+    image: mysql/mysql-server:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      #      - MYSQL_USER=root
+      #      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+    #    volumes:
+    #      - ./data/mysql:/data/mysql
+      - MYSQL_TCP_PORT=3310
+    ports:
+      - "3310:3310"
+    networks:
+      - mysql-atm
+
+networks:
+  mysql-atm:
+    driver: bridge
