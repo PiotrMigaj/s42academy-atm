@@ -24,6 +24,6 @@ public class User {
     private String lastName;
     @Column(nullable = false,unique = true)
     private String email;
-    @Column(nullable = false,columnDefinition = "CHAR(4)")
+    @Column(nullable = false,columnDefinition = "CHAR(60)")
     private String pin;
 }

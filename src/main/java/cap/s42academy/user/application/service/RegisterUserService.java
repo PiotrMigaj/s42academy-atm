@@ -7,6 +7,7 @@ import cap.s42academy.user.application.port.out.SaveUserPort;
 import cap.s42academy.user.domain.entity.User;
 import cap.s42academy.user.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -22,12 +23,13 @@ class RegisterUserService implements RegisterUserUseCase {
     private static final String USER_WITH_EMAIL_ALREADY_EXISTS = "User with email: %s already exists!";
     private final SaveUserPort saveUserPort;
     private final ExistsUserByEmailPort existsUserByEmailPort;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
-    public String registerUser(@Valid RegisterUserCommand command) {
+    public UserId handle(@Valid RegisterUserCommand command) {
         String email = command.email();
-        if (existsUserByEmailPort.existsUserByEmail(email)){
+        if (existsUserByEmailPort.existsBy(email)){
             throw new IllegalArgumentException(USER_WITH_EMAIL_ALREADY_EXISTS.formatted(email));
         }
         User userToPersist = User.builder()
@@ -35,8 +37,8 @@ class RegisterUserService implements RegisterUserUseCase {
                 .firstName(command.firstName())
                 .lastName(command.lastName())
                 .email(email)
-                .pin(command.pin())
+                .pin(passwordEncoder.encode(command.pin()))
                 .build();
-        return saveUserPort.saveUser(userToPersist).toString();
+        return saveUserPort.saveUser(userToPersist);
     }
 }

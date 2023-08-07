@@ -1,5 +1,6 @@
 package cap.s42academy.user.domain.entity;
 
+import cap.s42academy.user.domain.valueobject.SessionId;
 import cap.s42academy.user.domain.valueobject.SessionStatus;
 import lombok.*;
 
@@ -14,9 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 public class Session {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    @AttributeOverride(name = "value", column = @Column(name = "id",columnDefinition = "BINARY(16)"))
+    private SessionId sessionId;
     @Version
     private Long version;
     @Column(nullable = false)

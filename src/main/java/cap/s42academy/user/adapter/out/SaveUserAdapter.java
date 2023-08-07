@@ -2,6 +2,7 @@ package cap.s42academy.user.adapter.out;
 
 import cap.s42academy.user.application.port.out.SaveUserPort;
 import cap.s42academy.user.domain.entity.User;
+import cap.s42academy.user.domain.valueobject.UserId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ class SaveUserAdapter implements SaveUserPort {
 
     private final UserRepository userRepository;
     @Override
-    public UUID saveUser(User user) {
-        return userRepository.save(user).getUserId().getValue();
+    public UserId saveUser(User user) {
+        return userRepository.save(user).getUserId();
     }
 }
