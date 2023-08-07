@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    username: sa
+    url: jdbc:h2:file:./s42_schema_db;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    password: ''
+  h2:
+    console:
+      enabled: 'true'
+  sql:
+    init:
+      platform: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: 'true'
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
