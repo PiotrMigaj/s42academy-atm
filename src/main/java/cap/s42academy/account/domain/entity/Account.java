@@ -20,6 +20,8 @@ public class Account {
     @EmbeddedId
     @AttributeOverride(name = "value", column = @Column(name = "id",columnDefinition = "BINARY(16)"))
     private AccountId accountId;
+    @Version
+    private Long version;
     @Column(nullable = false,columnDefinition = "BINARY(16)")
     private UUID accountHolderId;
     @Column(nullable = false)
