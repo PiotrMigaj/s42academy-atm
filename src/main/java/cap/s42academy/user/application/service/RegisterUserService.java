@@ -20,7 +20,7 @@ import java.util.UUID;
 @Validated
 class RegisterUserService implements RegisterUserUseCase {
 
-    private static final String USER_WITH_EMAIL_ALREADY_EXISTS = "User with email: %s already exists!";
+    static final String USER_WITH_EMAIL_ALREADY_EXISTS = "User with email: %s already exists!";
     private final SaveUserPort saveUserPort;
     private final ExistsUserByEmailPort existsUserByEmailPort;
     private final PasswordEncoder passwordEncoder;

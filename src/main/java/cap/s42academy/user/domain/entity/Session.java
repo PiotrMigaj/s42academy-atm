@@ -21,8 +21,11 @@ public class Session {
     @Version
     private Long version;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Setter
     private SessionStatus sessionStatus;
     private LocalDateTime createdAt;
+    @Setter
     private LocalDateTime closedAt;
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
