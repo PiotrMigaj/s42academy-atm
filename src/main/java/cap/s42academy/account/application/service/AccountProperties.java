@@ -15,5 +15,6 @@ import java.math.BigDecimal;
 class AccountProperties {
 
     private final BigDecimal openingBalance;
+    private final int maxNumberOfTransactions;
 
 }

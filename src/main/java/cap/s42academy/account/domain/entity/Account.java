@@ -2,13 +2,19 @@ package cap.s42academy.account.domain.entity;
 
 import cap.s42academy.account.domain.valueobject.AccountId;
 import cap.s42academy.account.domain.valueobject.AccountStatus;
+import cap.s42academy.account.domain.valueobject.TransactionType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static cap.s42academy.account.domain.valueobject.AccountStatus.ACTIVE;
+import static cap.s42academy.account.domain.valueobject.TransactionType.DEPOSIT;
 
 @Entity
 @Getter
@@ -29,6 +35,8 @@ public class Account {
     private AccountStatus accountStatus;
     @Column(precision = 19,scale = 2)
     private BigDecimal balance;
+    @OneToMany(mappedBy = "account",cascade = CascadeType.ALL)
+    private Set<Transaction> transactions = new HashSet<>();
 
     public static Account createNew(UUID accountHolderId,BigDecimal openingBalance){
         return Account.builder()
@@ -38,5 +46,21 @@ public class Account {
                 .balance(openingBalance)
                 .build();
     }
+
+    public boolean deposit(BigDecimal amount, LocalDate dateOfTransaction, LocalTime timeOfTransaction){
+        if (isNegativeOrZero(amount)){
+            return false;
+        }
+        this.balance = this.balance.add(amount);
+        Transaction transaction = Transaction.createNew(DEPOSIT, amount, dateOfTransaction,timeOfTransaction,this);
+        this.transactions.add(transaction);
+        return true;
+    }
+
+    private boolean isNegativeOrZero(BigDecimal amount){
+        return amount.compareTo(BigDecimal.ZERO) <= 0;
+    }
+
+
 
 }
