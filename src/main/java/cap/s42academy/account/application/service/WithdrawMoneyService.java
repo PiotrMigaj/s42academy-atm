@@ -39,8 +39,8 @@ class WithdrawMoneyService implements WithdrawMoneyUseCase {
         if (account.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(accountId.getValue()));
         }
-        maxNumberOfTransactionsValidator.validate(accountId);
         accountHolderAuthenticationValidator.validate(account);
+        maxNumberOfTransactionsValidator.validate(accountId);
         if (!account.withdraw(command.amount(),timeProvider.dateNow(),timeProvider.timeNow())){
             throw new IllegalArgumentException("Can not withdraw money, invalid amount of money to withdraw!");
         }

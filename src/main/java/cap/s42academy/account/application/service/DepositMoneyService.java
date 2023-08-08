@@ -40,8 +40,8 @@ class DepositMoneyService implements DepositMoneyUseCase {
         if (account.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(accountId.getValue()));
         }
-        maxNumberOfTransactionsValidator.validate(accountId);
         accountHolderAuthenticationValidator.validate(account);
+        maxNumberOfTransactionsValidator.validate(accountId);
         if (!account.deposit(command.amount(),timeProvider.dateNow(),timeProvider.timeNow())){
             throw new IllegalArgumentException(CAN_NOT_DEPOSIT_MONEY_INVALID_AMOUNT_OF_MONEY_TO_DEPOSIT);
         }
