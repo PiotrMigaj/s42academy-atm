@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 public interface QueryAccountTransactionsProjection {
 

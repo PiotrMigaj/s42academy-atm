@@ -35,10 +35,10 @@ class TransferMoneyService implements TransferMoneyUseCase {
         AccountId sourceAccountId = AccountId.of(UUID.fromString(command.sourceAccountId()));
         Account sourceAccount = findAccountByIdPort.findBy(sourceAccountId)
                 .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(sourceAccountId.getValue())));
+        accountHolderAuthenticationValidator.validate(sourceAccount);
         if (sourceAccount.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(sourceAccountId.getValue()));
         }
-        accountHolderAuthenticationValidator.validate(sourceAccount);
         maxNumberOfTransactionsValidator.validate(sourceAccountId);
         if (!sourceAccount.withdraw(command.amount(),timeProvider.dateNow(),timeProvider.timeNow())){
             throw new IllegalArgumentException("Can not withdraw money, invalid amount of money to withdraw!");

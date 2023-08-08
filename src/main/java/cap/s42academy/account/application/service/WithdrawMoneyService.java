@@ -36,10 +36,10 @@ class WithdrawMoneyService implements WithdrawMoneyUseCase {
         AccountId accountId = AccountId.of(UUID.fromString(command.accountId()));
         Account account = findAccountByIdPort.findBy(accountId)
                 .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(accountId.getValue())));
+        accountHolderAuthenticationValidator.validate(account);
         if (account.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(accountId.getValue()));
         }
-        accountHolderAuthenticationValidator.validate(account);
         maxNumberOfTransactionsValidator.validate(accountId);
         if (!account.withdraw(command.amount(),timeProvider.dateNow(),timeProvider.timeNow())){
             throw new IllegalArgumentException("Can not withdraw money, invalid amount of money to withdraw!");

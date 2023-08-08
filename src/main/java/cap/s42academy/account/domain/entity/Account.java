@@ -2,12 +2,10 @@ package cap.s42academy.account.domain.entity;
 
 import cap.s42academy.account.domain.valueobject.AccountId;
 import cap.s42academy.account.domain.valueobject.AccountStatus;
-import cap.s42academy.account.domain.valueobject.TransactionType;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -34,6 +32,7 @@ public class Account {
     private UUID accountHolderId;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Setter
     private AccountStatus accountStatus;
     @Column(precision = 19,scale = 2)
     private BigDecimal balance;

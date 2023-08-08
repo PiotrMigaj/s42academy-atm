@@ -26,10 +26,10 @@ class QueryAccountTransactionsService implements QueryAccountTransactionsUseCase
     public List<QueryAccountTransactionsProjection> queryBy(AccountId accountId) {
         Account account = findAccountByIdPort.findBy(accountId)
                 .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(accountId.getValue())));
+        accountHolderAuthenticationValidator.validate(account);
         if (account.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(accountId.getValue()));
         }
-        accountHolderAuthenticationValidator.validate(account);
         return queryAccountTransactionsPort.queryBy(accountId);
     }
 }
