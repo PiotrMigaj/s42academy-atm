@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-class OpenSessionForAccountHolderValidator {
+class AccountHolderAuthenticationValidator {
 
-    static final String USER_WITH_ID_IS_UNAUTHORIZED = "User with ID=%s is unauthorized!";
+    static final String USER_WITH_ID_IS_UNAUTHENTICATED = "User with ID=%s is unauthenticated!";
     private final ExistsOpenSessionForAccountHolderPort existsOpenSessionForAccountHolderPort;
 
     @Transactional(readOnly = true)
@@ -20,7 +20,7 @@ class OpenSessionForAccountHolderValidator {
         UUID accountHolderId = account.getAccountHolderId();
         boolean existsOpenSessionForAccountHolder = existsOpenSessionForAccountHolderPort.existsOpenSession(accountHolderId);
         if (!existsOpenSessionForAccountHolder){
-            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHORIZED.formatted(accountHolderId));
+            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(accountHolderId));
         }
     }
 }

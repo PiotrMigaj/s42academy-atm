@@ -26,4 +26,4 @@ logging:
 
 account:
   openingBalance: '100.00'
-  maxNumberOfTransactions: 1
+  maxNumberOfTransactions: 10

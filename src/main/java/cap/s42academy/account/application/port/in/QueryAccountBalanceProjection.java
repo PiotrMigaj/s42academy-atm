@@ -9,4 +9,5 @@ public interface QueryAccountBalanceProjection {
     @Value("#{target.accountId.getValue().toString()}")
     String getAccountId();
     BigDecimal getBalance();
+
 }

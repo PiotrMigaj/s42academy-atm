@@ -23,8 +23,7 @@ class UserPinChangeService implements UserPinChangeUseCase {
 
     static final String THERE_IS_NO_USER_WITH_ID = "There is no user with ID=%s";
     static final String NEW_PIN_VALUE_MUST_DIFFER_FROM_THE_CURRENT_ONE = "New pin value must differ from the current one!";
-    static final String USER_WITH_ID_IS_UNAUTHORIZED = "User with ID=%s is unauthorized!";
-
+    static final String USER_WITH_ID_IS_UNAUTHENTICATED = "User with ID=%s is unauthenticated!";
     private final SaveUserPort saveUserPort;
     private final FindUserByIdPort findUserByIdPort;
     private final PasswordEncoder passwordEncoder;
@@ -44,7 +43,7 @@ class UserPinChangeService implements UserPinChangeUseCase {
 
     private void validateIfUserIsAuthorized(UserPinChangeCommand command, UserId userId) {
         if (!existsOpenSessionForUserWithIdPort.existsOpenSession(userId)){
-            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHORIZED.formatted(command.userId()));
+            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(command.userId()));
         }
     }
 
