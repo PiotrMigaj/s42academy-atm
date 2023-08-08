@@ -3,6 +3,7 @@ package cap.s42academy.user.application.service;
 import cap.s42academy.user.application.port.in.RegisterUserCommand;
 import cap.s42academy.user.application.port.in.RegisterUserUseCase;
 import cap.s42academy.user.application.port.out.ExistsUserByEmailPort;
+import cap.s42academy.user.application.port.out.OpenAccountPort;
 import cap.s42academy.user.application.port.out.SaveUserPort;
 import cap.s42academy.user.domain.entity.User;
 import cap.s42academy.user.domain.valueobject.UserId;
@@ -24,6 +25,7 @@ class RegisterUserService implements RegisterUserUseCase {
     private final SaveUserPort saveUserPort;
     private final ExistsUserByEmailPort existsUserByEmailPort;
     private final PasswordEncoder passwordEncoder;
+    private final OpenAccountPort openAccountPort;
 
     @Transactional
     @Override
@@ -39,6 +41,8 @@ class RegisterUserService implements RegisterUserUseCase {
                 .email(email)
                 .pin(passwordEncoder.encode(command.pin()))
                 .build();
-        return saveUserPort.saveUser(userToPersist);
+        UserId userId = saveUserPort.save(userToPersist);
+        openAccountPort.openAccountForUser(userId);
+        return userId;
     }
 }

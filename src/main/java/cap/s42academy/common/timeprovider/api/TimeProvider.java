@@ -16,6 +16,8 @@ public interface TimeProvider {
         return LocalDate.ofInstant(now(), ZoneId.systemDefault());
     }
 
+    default LocalTime timeNow() {return LocalTime.ofInstant(now(), ZoneId.systemDefault());}
+
     default LocalDateTime dateTimeNow() {
         return LocalDateTime.ofInstant(now(), ZoneId.systemDefault());
     }

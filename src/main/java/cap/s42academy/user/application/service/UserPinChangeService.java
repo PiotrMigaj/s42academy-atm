@@ -39,7 +39,7 @@ class UserPinChangeService implements UserPinChangeUseCase {
                 .orElseThrow(() -> new IllegalArgumentException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
         checkIfNewPinValueDifferFromTheCurrentOne(command, userToUpdate);
         userToUpdate.setPin(passwordEncoder.encode(command.pin()));
-        saveUserPort.saveUser(userToUpdate);
+        saveUserPort.save(userToUpdate);
     }
 
     private void validateIfUserIsAuthorized(UserPinChangeCommand command, UserId userId) {
