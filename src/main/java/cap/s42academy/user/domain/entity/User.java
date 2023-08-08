@@ -25,5 +25,6 @@ public class User {
     @Column(nullable = false,unique = true)
     private String email;
     @Column(nullable = false,columnDefinition = "CHAR(60)")
+    @Setter
     private String pin;
 }

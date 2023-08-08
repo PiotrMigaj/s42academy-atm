@@ -1,7 +1,8 @@
 package cap.s42academy.user.adapter.in;
 
 import cap.s42academy.user.application.port.in.LogoutUserCommand;
-import cap.s42academy.user.application.port.in.LogoutUserUseCase;
+import cap.s42academy.user.application.port.in.UserPinChangeCommand;
+import cap.s42academy.user.application.port.in.UserPinChangeUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-class LogoutUserRestAdapter {
+class UserPinChangeRestAdapter {
 
-    private final LogoutUserUseCase logoutUserUseCase;
+    private final UserPinChangeUseCase userPinChangeUseCase;
 
-    @PatchMapping("api/v1/users/logout")
-    ResponseEntity<Void> logoutUser(@RequestBody LogoutUserCommand command){
-        logoutUserUseCase.handle(command);
+    @PatchMapping("api/v1/users/pin-change")
+    ResponseEntity<Void> loginUser(@RequestBody UserPinChangeCommand command){
+        userPinChangeUseCase.handle(command);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
