@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static cap.s42academy.account.domain.valueobject.AccountStatus.ACTIVE;
 import static cap.s42academy.account.domain.valueobject.TransactionType.DEPOSIT;
+import static cap.s42academy.account.domain.valueobject.TransactionType.WITHDRAWAL;
 
 @Entity
 @Getter
@@ -57,8 +59,30 @@ public class Account {
         return true;
     }
 
+    public boolean withdraw(BigDecimal amount, LocalDate dateOfTransaction, LocalTime timeOfTransaction){
+        if (isNegativeOrZero(amount)){
+            return false;
+        }
+        if (!mayWithdraw(amount)){
+            return false;
+        }
+        this.balance = this.balance.subtract(amount);
+        Transaction transaction = Transaction.createNew(WITHDRAWAL, amount, dateOfTransaction,timeOfTransaction,this);
+        this.transactions.add(transaction);
+        return true;
+    }
+
     private boolean isNegativeOrZero(BigDecimal amount){
         return amount.compareTo(BigDecimal.ZERO) <= 0;
+    }
+
+    public boolean isNegative(BigDecimal amount){
+        return amount.compareTo(BigDecimal.ZERO) < 0;
+    }
+
+    private boolean mayWithdraw(BigDecimal amount) {
+        BigDecimal subtracted = this.balance.subtract(amount);
+        return !isNegative(subtracted);
     }
 
 

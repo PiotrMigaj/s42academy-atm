@@ -17,7 +17,6 @@ class MaxNumberOfTransactionsValidator {
     private final CountNumberOfTransactionsPerDayPort countNumberOfTransactionsPerDayPort;
     private final TimeProvider timeProvider;
 
-    @Transactional
     public void validate(AccountId accountId){
         int numOfTransactionsPerDay = countNumberOfTransactionsPerDayPort.countNumber(accountId, timeProvider.dateNow());
         if (numOfTransactionsPerDay>=accountProperties.getMaxNumberOfTransactions()){
