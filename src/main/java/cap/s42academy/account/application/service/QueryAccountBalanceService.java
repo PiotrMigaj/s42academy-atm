@@ -18,10 +18,11 @@ import javax.persistence.EntityNotFoundException;
 class QueryAccountBalanceService implements QueryAccountBalanceUseCase {
 
     static final String ACCOUNT_WITH_ID_DOES_NOT_EXISTS = "Account with ID=%s does not exists!";
-    public static final String ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS = "Account with ID=%s does not have ACTIVE status!";
+    static final String ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS = "Account with ID=%s does not have ACTIVE status!";
     private final QueryAccountBalancePort queryAccountBalancePort;
     private final FindAccountByIdPort findAccountByIdPort;
     private final AccountHolderAuthenticationValidator accountHolderAuthenticationValidator;
+
     @Transactional(readOnly = true)
     @Override
     public QueryAccountBalanceProjection queryBy(AccountId accountId) {
