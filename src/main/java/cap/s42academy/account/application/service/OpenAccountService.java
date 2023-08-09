@@ -1,8 +1,8 @@
 package cap.s42academy.account.application.service;
 
-import cap.s42academy.account.application.port.out.SaveAccountPort;
 import cap.s42academy.account.application.port.in.OpenAccountCommand;
 import cap.s42academy.account.application.port.in.OpenAccountUseCase;
+import cap.s42academy.account.application.port.out.SaveAccountPort;
 import cap.s42academy.account.domain.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

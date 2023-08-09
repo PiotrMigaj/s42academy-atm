@@ -18,7 +18,7 @@ class RegisterUserRestAdapter {
     private final RegisterUserUseCase registerUserUseCase;
 
     @PostMapping("api/v1/users/register")
-    ResponseEntity<Map<String,String>> registerUser(@RequestBody RegisterUserCommand command){
+    public ResponseEntity<Map<String,String>> registerUser(@RequestBody RegisterUserCommand command){
         String userId = registerUserUseCase.handle(command).getValue().toString();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
