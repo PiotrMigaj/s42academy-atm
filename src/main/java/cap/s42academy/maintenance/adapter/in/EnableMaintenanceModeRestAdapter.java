@@ -14,7 +14,7 @@ class EnableMaintenanceModeRestAdapter {
 
     private final EnableMaintenanceModeUseCase enableMaintenanceModeUseCase;
 
-    @PostMapping("api/v1/enable-maintenance-mode")
+    @PostMapping("api/v1/maintenance/enable-maintenance-mode")
     ResponseEntity<Void> enableMaintenanceMode(){
         enableMaintenanceModeUseCase.handle(new EnableMaintenanceModeCommand());
         return ResponseEntity.status(HttpStatus.OK).build();
