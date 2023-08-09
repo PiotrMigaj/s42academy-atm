@@ -2,6 +2,7 @@ package cap.s42academy.account.application.service;
 
 import cap.s42academy.account.application.port.out.ExistsOpenSessionForAccountHolderPort;
 import cap.s42academy.account.domain.entity.Account;
+import cap.s42academy.common.exception.api.UserUnauthenticatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ class AccountHolderAuthenticationValidator {
         UUID accountHolderId = account.getAccountHolderId();
         boolean existsOpenSessionForAccountHolder = existsOpenSessionForAccountHolderPort.existsOpenSession(accountHolderId);
         if (!existsOpenSessionForAccountHolder){
-            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(accountHolderId));
+            throw new UserUnauthenticatedException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(accountHolderId));
         }
     }
 }

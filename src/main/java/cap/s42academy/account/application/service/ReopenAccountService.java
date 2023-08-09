@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 @RequiredArgsConstructor
 class ReopenAccountService implements ReopenAccountUseCase {
@@ -24,7 +26,7 @@ class ReopenAccountService implements ReopenAccountUseCase {
     @Override
     public void handle(AccountId accountId) {
         Account account = findAccountByIdPort.findBy(accountId)
-                .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(accountId.getValue())));
+                .orElseThrow(() -> new EntityNotFoundException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(accountId.getValue())));
         accountHolderAuthenticationValidator.validate(account);
         if (account.getAccountStatus()!= AccountStatus.CLOSED){
             throw new IllegalStateException(CAN_NOT_REOPEN_ACCOUNT_WHEN_ACCOUNT_STATUS_DIFFERS_FROM_CLOSED);

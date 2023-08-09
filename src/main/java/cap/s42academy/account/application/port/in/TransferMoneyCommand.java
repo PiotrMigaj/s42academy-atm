@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record TransferMoneyCommand(
-        @NotBlank String sourceAccountId,
-        @NotBlank String targetAccountId,
-        @NotNull BigDecimal amount
+        @NotBlank(message = "sourceAccountId can not be blank!") String sourceAccountId,
+        @NotBlank(message = "targetAccountId can not be blank!") String targetAccountId,
+        @NotNull(message = "amount can not be null!") BigDecimal amount
         ) {
 }

@@ -1,5 +1,6 @@
 package cap.s42academy.user.application.service;
 
+import cap.s42academy.common.exception.api.UserUnauthenticatedException;
 import cap.s42academy.user.application.port.in.UserPinChangeCommand;
 import cap.s42academy.user.application.port.in.UserPinChangeUseCase;
 import cap.s42academy.user.application.port.out.ExistsOpenSessionForUserWithIdPort;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.UUID;
 
@@ -35,7 +37,7 @@ class UserPinChangeService implements UserPinChangeUseCase {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
         validateIfUserIsAuthorized(command, userId);
         User userToUpdate = findUserByIdPort.findBy(userId)
-                .orElseThrow(() -> new IllegalArgumentException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
+                .orElseThrow(() -> new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
         checkIfNewPinValueDifferFromTheCurrentOne(command, userToUpdate);
         userToUpdate.setPin(passwordEncoder.encode(command.pin()));
         saveUserPort.save(userToUpdate);
@@ -43,7 +45,7 @@ class UserPinChangeService implements UserPinChangeUseCase {
 
     private void validateIfUserIsAuthorized(UserPinChangeCommand command, UserId userId) {
         if (!existsOpenSessionForUserWithIdPort.existsOpenSession(userId)){
-            throw new IllegalStateException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(command.userId()));
+            throw new UserUnauthenticatedException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(command.userId()));
         }
     }
 

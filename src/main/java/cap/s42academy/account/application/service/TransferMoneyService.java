@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.UUID;
@@ -41,7 +42,7 @@ class TransferMoneyService implements TransferMoneyUseCase {
     public void handle(@Valid TransferMoneyCommand command) {
         AccountId sourceAccountId = AccountId.of(UUID.fromString(command.sourceAccountId()));
         Account sourceAccount = findAccountByIdPort.findBy(sourceAccountId)
-                .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(sourceAccountId.getValue())));
+                .orElseThrow(() -> new EntityNotFoundException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(sourceAccountId.getValue())));
         accountHolderAuthenticationValidator.validate(sourceAccount);
         if (sourceAccount.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(sourceAccountId.getValue()));
@@ -54,7 +55,7 @@ class TransferMoneyService implements TransferMoneyUseCase {
 
         AccountId targetAccountId = AccountId.of(UUID.fromString(command.targetAccountId()));
         Account targetAccount = findAccountByIdPort.findBy(targetAccountId)
-                .orElseThrow(() -> new IllegalArgumentException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(targetAccountId.getValue())));
+                .orElseThrow(() -> new EntityNotFoundException(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(targetAccountId.getValue())));
         if (targetAccount.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(targetAccountId.getValue()));
         }

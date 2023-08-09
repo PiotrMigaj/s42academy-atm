@@ -1,5 +1,6 @@
-package cap.s42academy.aspect.maintenance;
+package cap.s42academy.aspect.maintenance.internal;
 
+import cap.s42academy.aspect.maintenance.api.MaintenanceModeException;
 import cap.s42academy.maintenance.application.port.in.ExistsActiveMaintenanceModeUseCase;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.Aspect;

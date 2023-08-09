@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 public record LoginUserCommand(
-        @NotBlank String userId,
-        @NotBlank @Pattern(regexp = "\\d{4}") String pin
+        @NotBlank(message = "userId can not be blank!") String userId,
+        @NotBlank(message = "PIN can not be blank!") @Pattern(regexp = "\\d{4}",message = "PIN must contain 4 digits!") String pin
 ) {
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +37,7 @@ class LogoutUserService implements LogoutUserUseCase {
     public void handle(@Valid LogoutUserCommand command) {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
         if (!existsUserByIdPort.existsBy(userId)){
-            throw new IllegalArgumentException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId()));
+            throw new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId()));
         }
         Optional<Session> optionalSession =
                 getOpenSessionForUserWithIdPort.getOpenSession(userId);

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record DepositMoneyCommand(
-        @NotBlank String accountId,
-        @NotNull BigDecimal amount
+        @NotBlank(message = "accountId can not be blank!") String accountId,
+        @NotNull(message = "amount can not be null!") BigDecimal amount
         ) {
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,7 +40,7 @@ class LoginUserService implements LoginUserUseCase {
     public SessionId handle(LoginUserCommand command) {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
         User user = findUserByIdPort.findBy(userId)
-                .orElseThrow(() -> new IllegalArgumentException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
+                .orElseThrow(() -> new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
         checkIfPinValueMatchesStoredOne(command, user);
         Optional<Session> optionalSession = getOpenSessionForUserWithIdPort.getOpenSession(userId);
         if (optionalSession.isPresent()){
