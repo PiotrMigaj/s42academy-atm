@@ -1,7 +1,7 @@
 package cap.s42academy.account.domain.entity;
 
-import cap.s42academy.account.domain.valueobject.TransactionType;
 import cap.s42academy.account.domain.valueobject.TransactionId;
+import cap.s42academy.account.domain.valueobject.TransactionType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,13 +33,16 @@ public class Transaction {
     private LocalTime timeOfTransaction;
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
+    @Column(columnDefinition = "TINYINT(1)",nullable = false)
+    private Boolean isSourceAccountTheSame;
 
     public static Transaction createNew(
         TransactionType transactionType,
         BigDecimal amount,
         LocalDate dateOfTransaction,
         LocalTime timeOfTransaction,
-        Account account
+        Account account,
+        Boolean isSourceAccountTheSame
     ){
         return Transaction.builder()
                 .transactionId(TransactionId.of(UUID.randomUUID()))
@@ -48,6 +51,7 @@ public class Transaction {
                 .dateOfTransaction(dateOfTransaction)
                 .timeOfTransaction(timeOfTransaction)
                 .account(account)
+                .isSourceAccountTheSame(isSourceAccountTheSame)
                 .build();
     }
 

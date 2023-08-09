@@ -40,7 +40,8 @@ class TransferMoneyService implements TransferMoneyUseCase {
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(sourceAccountId.getValue()));
         }
         maxNumberOfTransactionsValidator.validate(sourceAccountId);
-        if (!sourceAccount.withdraw(command.amount(),timeProvider.dateNow(),timeProvider.timeNow())){
+        boolean isWithdrawSuccessful = sourceAccount.withdraw(command.amount(), timeProvider.dateNow(), timeProvider.timeNow(),true);
+        if (!isWithdrawSuccessful){
             throw new IllegalArgumentException("Can not withdraw money, invalid amount of money to withdraw!");
         }
 
@@ -50,7 +51,7 @@ class TransferMoneyService implements TransferMoneyUseCase {
         if (targetAccount.getAccountStatus()!= AccountStatus.ACTIVE){
             throw new IllegalStateException(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(targetAccountId.getValue()));
         }
-        targetAccount.deposit(command.amount(),timeProvider.dateNow(),timeProvider.timeNow());
+        targetAccount.deposit(command.amount(),timeProvider.dateNow(),timeProvider.timeNow(),false);
 
         saveAccountPort.save(sourceAccount);
         saveAccountPort.save(targetAccount);

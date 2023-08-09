@@ -48,17 +48,27 @@ public class Account {
                 .build();
     }
 
-    public boolean deposit(BigDecimal amount, LocalDate dateOfTransaction, LocalTime timeOfTransaction){
+    public boolean deposit(
+            BigDecimal amount,
+            LocalDate dateOfTransaction,
+            LocalTime timeOfTransaction,
+            Boolean isSourceAccountTheSame
+    ){
         if (isNegativeOrZero(amount)){
             return false;
         }
         this.balance = this.balance.add(amount);
-        Transaction transaction = Transaction.createNew(DEPOSIT, amount, dateOfTransaction,timeOfTransaction,this);
+        Transaction transaction = Transaction.createNew(DEPOSIT, amount, dateOfTransaction,timeOfTransaction,this,isSourceAccountTheSame);
         this.transactions.add(transaction);
         return true;
     }
 
-    public boolean withdraw(BigDecimal amount, LocalDate dateOfTransaction, LocalTime timeOfTransaction){
+    public boolean withdraw(
+            BigDecimal amount,
+            LocalDate dateOfTransaction,
+            LocalTime timeOfTransaction,
+            Boolean isSourceAccountTheSame
+    ){
         if (isNegativeOrZero(amount)){
             return false;
         }
@@ -66,7 +76,7 @@ public class Account {
             return false;
         }
         this.balance = this.balance.subtract(amount);
-        Transaction transaction = Transaction.createNew(WITHDRAWAL, amount, dateOfTransaction,timeOfTransaction,this);
+        Transaction transaction = Transaction.createNew(WITHDRAWAL, amount, dateOfTransaction,timeOfTransaction,this,isSourceAccountTheSame);
         this.transactions.add(transaction);
         return true;
     }

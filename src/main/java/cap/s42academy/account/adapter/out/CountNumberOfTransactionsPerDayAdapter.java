@@ -14,6 +14,6 @@ class CountNumberOfTransactionsPerDayAdapter implements CountNumberOfTransaction
     private final TransactionRepository transactionRepository;
     @Override
     public int countNumber(AccountId accountId, LocalDate date) {
-        return transactionRepository.countTransactionsByDateOfTransactionAndAccount_AccountId(date,accountId);
+        return transactionRepository.countTransactionsByDateOfTransactionAndAccount_AccountIdAndIsSourceAccountTheSame(date,accountId,true);
     }
 }
