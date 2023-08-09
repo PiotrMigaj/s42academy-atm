@@ -12,6 +12,7 @@ import java.util.List;
 interface TransactionRepository extends JpaRepository<Transaction, TransactionId> {
 
     int countTransactionsByDateOfTransactionAndAccount_AccountId(LocalDate date, AccountId accountId);
+    int countTransactionsByDateOfTransactionAndAccount_AccountIdAndIsSourceAccountTheSame(LocalDate date, AccountId accountId,Boolean isSourceAccountTheSame);
 
     List<QueryAccountTransactionsProjection> findTop5AllByAccount_AccountIdOrderByDateOfTransactionDescTimeOfTransactionDesc(AccountId accountId);
 
