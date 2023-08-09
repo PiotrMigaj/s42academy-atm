@@ -33,7 +33,7 @@ public class Transaction {
     private LocalTime timeOfTransaction;
     @ManyToOne(fetch = FetchType.LAZY)
     private Account account;
-    @Column(columnDefinition = "TINYINT(1)",nullable = false)
+    @Column(columnDefinition = "TINYINT",nullable = false)
     private Boolean isSourceAccountTheSame;
 
     public static Transaction createNew(
