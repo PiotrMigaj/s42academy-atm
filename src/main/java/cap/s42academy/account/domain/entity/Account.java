@@ -45,6 +45,7 @@ public class Account {
                 .accountHolderId(accountHolderId)
                 .accountStatus(ACTIVE)
                 .balance(openingBalance)
+                .transactions(new HashSet<>())
                 .build();
     }
 

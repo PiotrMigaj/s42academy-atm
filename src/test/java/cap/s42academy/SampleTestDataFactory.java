@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -83,6 +84,7 @@ public final class SampleTestDataFactory {
                 .accountHolderId(accountHolderId)
                 .accountStatus(accountStatus)
                 .balance(balance)
+                .transactions(new HashSet<>())
                 .build();
     }
 
