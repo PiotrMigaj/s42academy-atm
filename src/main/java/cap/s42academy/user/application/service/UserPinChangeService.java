@@ -35,15 +35,15 @@ class UserPinChangeService implements UserPinChangeUseCase {
     @Override
     public void handle(@Valid UserPinChangeCommand command) {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
-        validateIfUserIsAuthorized(command, userId);
         User userToUpdate = findUserByIdPort.findBy(userId)
                 .orElseThrow(() -> new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
+        validateIfUserIsAuthenticated(command, userId);
         checkIfNewPinValueDifferFromTheCurrentOne(command, userToUpdate);
         userToUpdate.setPin(passwordEncoder.encode(command.pin()));
         saveUserPort.save(userToUpdate);
     }
 
-    private void validateIfUserIsAuthorized(UserPinChangeCommand command, UserId userId) {
+    private void validateIfUserIsAuthenticated(UserPinChangeCommand command, UserId userId) {
         if (!existsOpenSessionForUserWithIdPort.existsOpenSession(userId)){
             throw new UserUnauthenticatedException(USER_WITH_ID_IS_UNAUTHENTICATED.formatted(command.userId()));
         }

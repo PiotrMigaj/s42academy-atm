@@ -41,11 +41,11 @@ class LoginUserService implements LoginUserUseCase {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
         User user = findUserByIdPort.findBy(userId)
                 .orElseThrow(() -> new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId())));
-        checkIfPinValueMatchesStoredOne(command, user);
         Optional<Session> optionalSession = getOpenSessionForUserWithIdPort.getOpenSession(userId);
         if (optionalSession.isPresent()){
             return optionalSession.get().getSessionId();
         }
+        checkIfPinValueMatchesStoredOne(command, user);
         Session sessionToSave = Session.builder()
                 .sessionId(SessionId.of(UUID.randomUUID()))
                 .sessionStatus(SessionStatus.OPEN)

@@ -41,7 +41,7 @@ class RegisterUserServiceTest {
     private ArgumentCaptor<User> userCaptor;
 
     @Test
-    void shouldThrowException_whenRegisterUser_andUserWithEmailAlreadyExists(){
+    void shouldThrowException_whenUserWithEmailAlreadyExists(){
         //given
         RegisterUserCommand command = new RegisterUserCommand(
                 UUID.randomUUID().toString(),

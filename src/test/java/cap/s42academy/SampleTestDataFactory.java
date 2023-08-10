@@ -28,7 +28,7 @@ public final class SampleTestDataFactory {
 
     public static final String PIN_VALUE = "0000";
 
-    public static User userWithId() {
+    public static User user() {
         return User.builder()
                 .userId(UserId.of(UUID.randomUUID()))
                 .firstName(UUID.randomUUID().toString())
@@ -38,9 +38,19 @@ public final class SampleTestDataFactory {
                 .build();
     }
 
-    public static User userWithoutId(String pin) {
+    public static User userWithoutPin(String pin) {
         return User.builder()
                 .userId(UserId.of(UUID.randomUUID()))
+                .firstName(UUID.randomUUID().toString())
+                .lastName(UUID.randomUUID().toString())
+                .email(UUID.randomUUID().toString())
+                .pin(pin)
+                .build();
+    }
+
+    public static User userWithoutIdAndWithoutPin(UserId userId,String pin) {
+        return User.builder()
+                .userId(userId)
                 .firstName(UUID.randomUUID().toString())
                 .lastName(UUID.randomUUID().toString())
                 .email(UUID.randomUUID().toString())
