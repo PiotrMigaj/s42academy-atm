@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "dcfb1dde-5f8a-470e-b854-f2a9b827c4df",
+		"name": "s42academy-atm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19674664",
+		"_collection_link": "https://lively-firefly-140997.postman.co/workspace/JSK-Capgemini~f64be9ab-27c5-43d6-9af7-07793e3054a6/collection/19674664-dcfb1dde-5f8a-470e-b854-f2a9b827c4df?action=share&creator=19674664&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "register user use case",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"Piotr\",\r\n    \"lastName\":\"Migaj\",\r\n    \"email\":\"pmigaj@gmail.com\",\r\n    \"pin\":\"0000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/register",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login user use case",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"7926ead6-5eb8-4b2e-9d89-c5ee6f6bb8aa\",\r\n    \"pin\":\"0000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/login",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout user",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"157e6f51-5405-4b44-9ffc-a6f8ac12d75f\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change user pin",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\":\"157e6f51-5405-4b44-9ffc-a6f8ac12d75f\",\r\n    \"pin\":\"1235\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users/pin-change",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"pin-change"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get account balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/get-balance/6935212d-7184-40ee-9bc8-6d478c737e6f",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"get-balance",
+						"6935212d-7184-40ee-9bc8-6d478c737e6f"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit money",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\":\"1076eed1-76f2-48a4-b4ce-0811f4a52a62\",\r\n    \"amount\":\"1500.00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/deposit-money",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"deposit-money"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdraw money",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountId\":\"a268ed9a-b8de-41e0-adcc-7f7a98afdc94\",\r\n    \"amount\":\"1.00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/withdraw-money",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"withdraw-money"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get transactions for account",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/get-transactions/66dba91e-451f-48b4-94a9-e4e0bc9e2237",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"get-transactions",
+						"66dba91e-451f-48b4-94a9-e4e0bc9e2237"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transfer money",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"sourceAccountId\":\"82a09b83-47c0-499a-9a7b-646633dd007d\",\r\n    \"targetAccountId\":\"abdc7f93-892c-4a32-a6eb-bb902f46198e\",\r\n    \"amount\":\"15.00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/transfer-money",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"transfer-money"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "close account",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/close-account/66dba91e-451f-48b4-94a9-e4e0bc9e2237",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"close-account",
+						"66dba91e-451f-48b4-94a9-e4e0bc9e2237"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reopen account",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/accounts/reopen-account/66dba91e-451f-48b4-94a9-e4e0bc9e2237",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"accounts",
+						"reopen-account",
+						"66dba91e-451f-48b4-94a9-e4e0bc9e2237"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enable maintenance port",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/maintenance/enable-maintenance-mode",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"maintenance",
+						"enable-maintenance-mode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ATM status check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/api/v1/maintenance/status-check",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"maintenance",
+						"status-check"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
