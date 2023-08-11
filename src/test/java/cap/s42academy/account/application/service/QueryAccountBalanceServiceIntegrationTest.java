@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class QueryAccountBalanceIntegrationTest extends IntegrationTestBase {
+class QueryAccountBalanceServiceIntegrationTest extends IntegrationTestBase {
     @Autowired
     private MockMvc mockMvc;
     @MockBean
