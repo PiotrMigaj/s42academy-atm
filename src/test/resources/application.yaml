@@ -19,3 +19,7 @@ spring:
       ddl-auto: create-drop
 server:
   port: '8091'
+
+account:
+  openingBalance: '100.00'
+  maxNumberOfTransactions: 5

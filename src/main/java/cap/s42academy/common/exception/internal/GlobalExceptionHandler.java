@@ -56,6 +56,13 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(httpStatus).body(createErrorDto(List.of(message),httpStatus));
     }
 
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ErrorDto> handleException(Exception exception) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        String message = "Ups... Something went wrong, we are trying to fix it!";
+        return ResponseEntity.status(httpStatus).body(createErrorDto(List.of(message),httpStatus));
+    }
+
     @ExceptionHandler(ValidationException.class)
     ResponseEntity<ErrorDto> handleException(ValidationException validationException){
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
