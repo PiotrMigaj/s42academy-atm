@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.time.Instant;
 import java.util.UUID;
 
 @Service
@@ -61,7 +60,7 @@ class DepositMoneyService implements DepositMoneyUseCase {
     private void publishPrintReceiptEvent(AccountId accountId) {
         printReceiptEventPublisherPort.publish(
                 new PrinterEvent(
-                        Instant.now(),
+                        timeProvider.now(),
                         DEPOSIT_MONEY,
                         SUCCESSFULLY_DEPOSITED_MONEY_TO_ACCOUNT_WITH_ID.formatted(accountId.getValue())
                 )

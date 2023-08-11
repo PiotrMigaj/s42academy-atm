@@ -30,6 +30,6 @@ interface SessionRepository extends JpaRepository<Session, SessionId> {
             and s.sessionStatus = cap.s42academy.user.domain.valueobject.SessionStatus.OPEN 
             """)
 //    @Lock(LockModeType.PESSIMISTIC_READ)
-//    TODO: Issue with H2 database -> does not work on H2
+//    TODO: Issue with H2 database -> does not work on H2 with @Lock(LockModeType.PESSIMISTIC_READ)
     boolean existsOpenSessionForUser(@Param("userId") UserId userId);
 }
