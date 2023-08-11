@@ -72,7 +72,6 @@ class LoginUserServiceTest {
         User user = userWithoutIdAndWithoutPin(userId, "1111");
         when(findUserByIdPort.findBy(userId)).thenReturn(Optional.ofNullable(user));
         when(passwordEncoder.matches(loginUserCommand.pin(),user.getPin())).thenReturn(false);
-        when(getOpenSessionForUserWithIdPort.getOpenSession(userId)).thenReturn(Optional.empty());
         //when
         //then
         assertThatThrownBy(()->loginUserService.handle(loginUserCommand))
@@ -88,6 +87,7 @@ class LoginUserServiceTest {
         User user = userWithoutIdAndWithoutPin(userId, loginUserCommand.pin());
         Session session = session(OPEN, LocalDateTime.now(), null, user);
         when(findUserByIdPort.findBy(userId)).thenReturn(Optional.ofNullable(user));
+        when(passwordEncoder.matches(loginUserCommand.pin(),user.getPin())).thenReturn(true);
         when(getOpenSessionForUserWithIdPort.getOpenSession(userId)).thenReturn(Optional.ofNullable(session));
         //when
         SessionId result = loginUserService.handle(loginUserCommand);

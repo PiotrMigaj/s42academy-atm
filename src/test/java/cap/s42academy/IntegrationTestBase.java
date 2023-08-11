@@ -37,8 +37,8 @@ public abstract class IntegrationTestBase {
     void cleanUpDB() {
         accountRepository.deleteAll();
         transactionRepository.deleteAll();
-        userRepository.deleteAll();
         sessionRepository.deleteAll();
+        userRepository.deleteAll();
         maintenanceRepository.deleteAll();
     }
 
