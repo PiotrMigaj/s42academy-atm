@@ -33,7 +33,7 @@ class LogoutUserServiceIntegrationTest extends IntegrationTestBase {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void shouldReturnBadRequest_whenLoginUser_andThereIsNoUserIdInRequest() throws Exception {
+    void shouldReturnBadRequest_whenLogoutUser_andThereIsNoUserIdInRequest() throws Exception {
         //given
         String creationRequest = """
                 {
