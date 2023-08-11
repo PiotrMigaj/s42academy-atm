@@ -35,7 +35,7 @@ class LoginUserServiceIntegrationTest extends IntegrationTestBase {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void shouldReturnBadRequest_whenLoginUser_andThereIsNoUserIdRequest() throws Exception {
+    void shouldReturnBadRequest_whenLoginUser_andThereIsNoUserIdInRequest() throws Exception {
         //given
         String creationRequest = """
                 {
