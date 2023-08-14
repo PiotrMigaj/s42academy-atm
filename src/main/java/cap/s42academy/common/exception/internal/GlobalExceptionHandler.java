@@ -1,6 +1,7 @@
 package cap.s42academy.common.exception.internal;
 
 import cap.s42academy.aspect.maintenance.api.MaintenanceModeException;
+import cap.s42academy.common.exception.api.ErrorDto;
 import cap.s42academy.common.exception.api.UserUnauthenticatedException;
 import cap.s42academy.common.timeprovider.api.TimeProvider;
 import lombok.RequiredArgsConstructor;

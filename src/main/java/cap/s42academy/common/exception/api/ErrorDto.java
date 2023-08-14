@@ -1,4 +1,4 @@
-package cap.s42academy.common.exception.internal;
+package cap.s42academy.common.exception.api;
 
 import lombok.Builder;
 
@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.List;
 
 @Builder
-record ErrorDto(
+public record ErrorDto(
         Instant time,
         int code,
         String error,

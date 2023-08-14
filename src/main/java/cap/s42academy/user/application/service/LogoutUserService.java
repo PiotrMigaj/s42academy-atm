@@ -3,7 +3,6 @@ package cap.s42academy.user.application.service;
 import cap.s42academy.common.timeprovider.api.TimeProvider;
 import cap.s42academy.user.application.port.in.LogoutUserCommand;
 import cap.s42academy.user.application.port.in.LogoutUserUseCase;
-import cap.s42academy.user.application.port.out.ExistsUserByIdPort;
 import cap.s42academy.user.application.port.out.GetOpenSessionForUserWithIdPort;
 import cap.s42academy.user.application.port.out.SaveSessionPort;
 import cap.s42academy.user.domain.entity.Session;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,16 +27,12 @@ class LogoutUserService implements LogoutUserUseCase {
 
     private final GetOpenSessionForUserWithIdPort getOpenSessionForUserWithIdPort;
     private final SaveSessionPort saveSessionPort;
-    private final ExistsUserByIdPort existsUserByIdPort;
     private final TimeProvider timeProvider;
 
     @Transactional
     @Override
     public void handle(@Valid LogoutUserCommand command) {
         UserId userId = UserId.of(UUID.fromString(command.userId()));
-        if (!existsUserByIdPort.existsBy(userId)){
-            throw new EntityNotFoundException(THERE_IS_NO_USER_WITH_ID.formatted(command.userId()));
-        }
         Optional<Session> optionalSession =
                 getOpenSessionForUserWithIdPort.getOpenSession(userId);
         if (optionalSession.isEmpty()){
