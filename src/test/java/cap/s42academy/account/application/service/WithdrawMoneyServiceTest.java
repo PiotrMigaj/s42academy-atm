@@ -1,6 +1,6 @@
 package cap.s42academy.account.application.service;
 
-import cap.s42academy.account.application.port.in.DepositMoneyCommand;
+import cap.s42academy.account.application.port.in.WithdrawMoneyCommand;
 import cap.s42academy.account.application.port.out.FindAccountByIdPort;
 import cap.s42academy.account.application.port.out.PrintReceiptEventPublisherPort;
 import cap.s42academy.account.application.port.out.SaveAccountPort;
@@ -23,14 +23,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static cap.s42academy.SampleTestDataFactory.account;
-import static cap.s42academy.account.application.service.DepositMoneyService.*;
+import static cap.s42academy.account.application.service.WithdrawMoneyService.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class DepositMoneyServiceTest {
+class WithdrawMoneyServiceTest {
 
     @Mock
     private FindAccountByIdPort findAccountByIdPort;
@@ -45,7 +45,7 @@ class DepositMoneyServiceTest {
     @Mock
     private PrintReceiptEventPublisherPort printReceiptEventPublisherPort;
     @InjectMocks
-    private DepositMoneyService depositMoneyService;
+    private WithdrawMoneyService withdrawMoneyService;
     @Captor
     private ArgumentCaptor<Account> accountCaptor;
     @Captor
@@ -55,14 +55,14 @@ class DepositMoneyServiceTest {
     void shouldThrowException_whenAccountDoesNotExist(){
         //given
         AccountId accountId = AccountId.of(UUID.randomUUID());
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 new BigDecimal("200.00")
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.empty());
         //when
         //then
-        assertThatThrownBy(()->depositMoneyService.handle(depositMoneyCommand))
+        assertThatThrownBy(()->withdrawMoneyService.handle(withdrawMoneyCommand))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(ACCOUNT_WITH_ID_DOES_NOT_EXISTS.formatted(accountId.getValue().toString()));
     }
@@ -72,92 +72,125 @@ class DepositMoneyServiceTest {
         //given
         Account account = account(UUID.randomUUID(), AccountStatus.CLOSED, new BigDecimal("200.00"));
         AccountId accountId = account.getAccountId();
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 new BigDecimal("200.00")
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
         //when
         //then
-        assertThatThrownBy(()->depositMoneyService.handle(depositMoneyCommand))
+        assertThatThrownBy(()->withdrawMoneyService.handle(withdrawMoneyCommand))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage(ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS.formatted(accountId.getValue().toString()));
     }
 
     @Test
-    void shouldThrowException_whenDepositAmountIsLessThanZero(){
+    void shouldThrowException_whenWithdrawAmountIsLessThanZero(){
         //given
         Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("200.00"));
         AccountId accountId = account.getAccountId();
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 new BigDecimal("-200.00")
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
         //when
         //then
-        assertThatThrownBy(()->depositMoneyService.handle(depositMoneyCommand))
+        assertThatThrownBy(()->withdrawMoneyService.handle(withdrawMoneyCommand))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(CAN_NOT_DEPOSIT_MONEY_INVALID_AMOUNT_OF_MONEY_TO_DEPOSIT);
+                .hasMessage(CAN_NOT_WITHDRAW_MONEY_INVALID_AMOUNT_OF_MONEY_TO_WITHDRAW);
     }
 
     @Test
-    void shouldThrowException_whenDepositAmountIsEqualZero(){
+    void shouldThrowException_whenWithdrawAmountIsEqualZero(){
         //given
         Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("200.00"));
         AccountId accountId = account.getAccountId();
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 BigDecimal.ZERO
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
         //when
         //then
-        assertThatThrownBy(()->depositMoneyService.handle(depositMoneyCommand))
+        assertThatThrownBy(()->withdrawMoneyService.handle(withdrawMoneyCommand))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(CAN_NOT_DEPOSIT_MONEY_INVALID_AMOUNT_OF_MONEY_TO_DEPOSIT);
+                .hasMessage(CAN_NOT_WITHDRAW_MONEY_INVALID_AMOUNT_OF_MONEY_TO_WITHDRAW);
     }
 
     @Test
-    void shouldDepositMoney(){
+    void shouldThrowException_whenThereIsNoEnoughMoney(){
         //given
         Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("200.00"));
         AccountId accountId = account.getAccountId();
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
+                accountId.getValue().toString(),
+                new BigDecimal("200.01")
+        );
+        when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
+        //when
+        //then
+        assertThatThrownBy(()->withdrawMoneyService.handle(withdrawMoneyCommand))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(CAN_NOT_WITHDRAW_MONEY_INVALID_AMOUNT_OF_MONEY_TO_WITHDRAW);
+    }
+
+    @Test
+    void shouldWithdrawMoney(){
+        //given
+        Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("250.00"));
+        AccountId accountId = account.getAccountId();
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 new BigDecimal("200.00")
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
         //when
-        depositMoneyService.handle(depositMoneyCommand);
+        withdrawMoneyService.handle(withdrawMoneyCommand);
         //then
         assertAll(
                 ()->verify(saveAccountPort,times(1)).save(accountCaptor.capture()),
-                ()->assertThat(accountCaptor.getValue().getBalance()).isEqualTo(new BigDecimal("400.00"))
+                ()->assertThat(accountCaptor.getValue().getBalance()).isEqualTo(new BigDecimal("50.00"))
+        );
+    }
+
+    @Test
+    void shouldWithdrawMoney_whenAfterWithdrawalAccountBalanceIsZero(){
+        //given
+        Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("200.00"));
+        AccountId accountId = account.getAccountId();
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
+                accountId.getValue().toString(),
+                new BigDecimal("200.00")
+        );
+        when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
+        //when
+        withdrawMoneyService.handle(withdrawMoneyCommand);
+        //then
+        assertAll(
+                ()->verify(saveAccountPort,times(1)).save(accountCaptor.capture()),
+                ()->assertThat(accountCaptor.getValue().getBalance()).isEqualTo(new BigDecimal("0.00"))
         );
     }
 
     @Test
     void shouldPublishPrintReceiptEvent(){
         //given
-        Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("200.00"));
+        Account account = account(UUID.randomUUID(), AccountStatus.ACTIVE, new BigDecimal("250.00"));
         AccountId accountId = account.getAccountId();
-        DepositMoneyCommand depositMoneyCommand = new DepositMoneyCommand(
+        WithdrawMoneyCommand withdrawMoneyCommand = new WithdrawMoneyCommand(
                 accountId.getValue().toString(),
                 new BigDecimal("200.00")
         );
         when(findAccountByIdPort.findBy(accountId)).thenReturn(Optional.of(account));
         //when
-        depositMoneyService.handle(depositMoneyCommand);
+        withdrawMoneyService.handle(withdrawMoneyCommand);
         //then
         assertAll(
                 ()->verify(printReceiptEventPublisherPort,times(1)).publish(printerEventCaptor.capture()),
-                ()->assertThat(printerEventCaptor.getValue().subject()).isEqualTo(DEPOSIT_MONEY),
-                ()->assertThat(printerEventCaptor.getValue().payload()).isEqualTo(SUCCESSFULLY_DEPOSITED_MONEY_TO_ACCOUNT_WITH_ID.formatted(accountId.getValue().toString()))
+                ()->assertThat(printerEventCaptor.getValue().subject()).isEqualTo(WITHDRAW_MONEY),
+                ()->assertThat(printerEventCaptor.getValue().payload()).isEqualTo(SUCCESSFULLY_WITHDRAWN_MONEY_FROM_ACCOUNT_WITH_ID.formatted(accountId.getValue().toString()))
         );
     }
-
-
-
 
 }
