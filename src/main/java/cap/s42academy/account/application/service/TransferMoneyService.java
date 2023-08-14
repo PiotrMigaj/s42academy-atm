@@ -29,6 +29,7 @@ class TransferMoneyService implements TransferMoneyUseCase {
     static final String ACCOUNT_WITH_ID_DOES_NOT_HAVE_ACTIVE_STATUS = "Account with ID=%s does not have ACTIVE status!";
     static final String TRANSFER_MONEY = "TRANSFER MONEY";
     static final String SUCCESSFULLY_TRANSFERRED_MONEY_FROM_ACCOUNT_WITH_ID_TO_ACCOUNT_WITH_ID = "Successfully transferred money from account with ID=%s to account with ID=%s.";
+    static final String CAN_NOT_WITHDRAW_MONEY_INVALID_AMOUNT_OF_MONEY_TO_WITHDRAW = "Can not withdraw money, invalid amount of money to withdraw!";
 
     private final FindAccountByIdPort findAccountByIdPort;
     private final AccountHolderAuthenticationValidator accountHolderAuthenticationValidator;
@@ -50,7 +51,7 @@ class TransferMoneyService implements TransferMoneyUseCase {
         maxNumberOfTransactionsValidator.validate(sourceAccountId);
         boolean isWithdrawSuccessful = sourceAccount.withdraw(command.amount(), timeProvider.dateNow(), timeProvider.timeNow(),true);
         if (!isWithdrawSuccessful){
-            throw new IllegalArgumentException("Can not withdraw money, invalid amount of money to withdraw!");
+            throw new IllegalArgumentException(CAN_NOT_WITHDRAW_MONEY_INVALID_AMOUNT_OF_MONEY_TO_WITHDRAW);
         }
 
         AccountId targetAccountId = AccountId.of(UUID.fromString(command.targetAccountId()));
