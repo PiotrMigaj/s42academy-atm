@@ -21,7 +21,7 @@ class MaintenanceModeAspectIntegrationTest extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     @Test
-    void shouldReturnInternalServerError_whenAtmIsInMaintenanceMode_andThereIsHitToUserRestAdapter() throws Exception {
+    void shouldReturnServiceUnavailable_whenAtmIsInMaintenanceMode_andThereIsHitToUserRestAdapter() throws Exception {
         //given
         existingMaintenance(maintenance(MaintenanceStatus.ACTIVE, LocalDateTime.now(), null));
         //when
@@ -48,7 +48,7 @@ class MaintenanceModeAspectIntegrationTest extends IntegrationTestBase {
     }
 
     @Test
-    void shouldReturnInternalServerError_whenAtmIsInMaintenanceMode_andThereIsHitToAccountRestAdapter() throws Exception {
+    void shouldReturnServiceUnavailable_whenAtmIsInMaintenanceMode_andThereIsHitToAccountRestAdapter() throws Exception {
         //given
         existingMaintenance(maintenance(MaintenanceStatus.ACTIVE, LocalDateTime.now(), null));
         //when
