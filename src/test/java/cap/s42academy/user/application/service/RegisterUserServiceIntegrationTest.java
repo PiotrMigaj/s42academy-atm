@@ -1,6 +1,7 @@
 package cap.s42academy.user.application.service;
 
 import cap.s42academy.IntegrationTestBase;
+import cap.s42academy.account.domain.entity.Account;
 import cap.s42academy.user.domain.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -233,6 +234,40 @@ class RegisterUserServiceIntegrationTest extends IntegrationTestBase {
                 ()->assertThat(allUsers.get(0).getFirstName()).isEqualTo(user.getFirstName()),
                 ()->assertThat(allUsers.get(0).getLastName()).isEqualTo(user.getLastName()),
                 ()->assertThat(allUsers.get(0).getEmail()).isEqualTo(user.getEmail())
+        );
+    }
+
+    @Test
+    void shouldPersistAccountForUser() throws Exception {
+        //given
+        User user = user();
+        String creationRequest = """
+                {
+                  "firstName": "%s",
+                  "lastName": "%s",
+                  "email": "%s",
+                  "pin": "%s"
+                }
+                """.formatted(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPin()
+        );
+        //when
+        mockMvc.perform(post("/api/v1/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(creationRequest))
+                .andDo(log())
+                .andExpect(status().isCreated());
+        //then
+        List<User> allUsers = getAllUsers();
+        List<Account> allAccounts = getAllAccounts();
+        assertAll(
+                ()->assertThat(allAccounts).isNotEmpty(),
+                ()->assertThat(allAccounts.get(0).getAccountId()).isNotNull(),
+                ()->assertThat(allAccounts.get(0).getAccountHolderId()).isEqualTo(allUsers.get(0).getUserId().getValue()),
+                ()->assertThat(allAccounts.get(0).getBalance()).isNotNull()
         );
     }
 

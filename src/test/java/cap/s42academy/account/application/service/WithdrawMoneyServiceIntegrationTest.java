@@ -3,7 +3,9 @@ package cap.s42academy.account.application.service;
 import cap.s42academy.IntegrationTestBase;
 import cap.s42academy.account.application.port.out.SaveAccountPort;
 import cap.s42academy.account.domain.entity.Account;
+import cap.s42academy.account.domain.entity.Transaction;
 import cap.s42academy.account.domain.valueobject.AccountStatus;
+import cap.s42academy.account.domain.valueobject.TransactionType;
 import cap.s42academy.printer.application.port.in.PrintReceiptUseCase;
 import cap.s42academy.user.domain.entity.User;
 import org.junit.jupiter.api.Test;
@@ -287,6 +289,37 @@ class WithdrawMoneyServiceIntegrationTest extends IntegrationTestBase {
                 ()->verify(saveAccountPort,times(1)).save(any()),
                 ()->assertThat(allAccounts).isNotEmpty(),
                 ()->assertThat(allAccounts.get(0).getBalance()).isEqualTo(new BigDecimal("0.00"))
+        );
+    }
+
+    @Test
+    void shouldWithdrawMoney_andStoreNewTransactionInTransactionHistory() throws Exception {
+        //given
+        User user = existingUser(user());
+        existingSession(session(OPEN, LocalDateTime.now(),null,user));
+        Account account = existingAccount(account(user.getUserId().getValue(), AccountStatus.ACTIVE, new BigDecimal("140.00")));
+        String creationRequest = """
+                {
+                  "accountId": "%s",
+                  "amount": "%s"
+                }
+                """.formatted(
+                account.getAccountId().getValue().toString(),
+                "120.00"
+        );
+        //when
+        mockMvc.perform(post("/api/v1/accounts/withdraw-money")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(creationRequest))
+                .andDo(log())
+                .andExpect(status().isOk());
+        //then
+        List<Transaction> allTransactions = getAllTransactions();
+        assertAll(
+                ()->assertThat(allTransactions).isNotEmpty(),
+                ()->assertThat(allTransactions.get(0).getTransactionId()).isNotNull(),
+                ()->assertThat(allTransactions.get(0).getTransactionType()).isEqualTo(TransactionType.WITHDRAWAL),
+                ()->assertThat(allTransactions.get(0).getIsSourceAccountTheSame()).isTrue()
         );
     }
 
